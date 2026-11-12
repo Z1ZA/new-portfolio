@@ -1,0 +1,34 @@
+## Context & Problem
+
+Cloud-hosted LLM APIs make early prototyping fast, but autonomous multi-step agents quickly hit three walls in sensitive industrial and operational environments:
+
+- **Unbounded token costs** when long-running agents iterate across logs, codebases, and shell tools for hours.
+- **Data residency and IP constraints** when working with proprietary engineering telemetry or internal workflows.
+- **Latency and rate-limit jitter** during nested tool-calling loops.
+
+Partnering with a Canadian co-founder of **Measurand / Orica**, I designed, assembled, and benchmarked a **self-hosted AI sandbox** capable of running autonomous agent loops entirely on local hardware.
+
+## Hardware & Local Inference Stack
+
+Rather than treating hardware as an afterthought, I spec'd and assembled a dedicated local LLM server optimized for **sustained high-memory-bandwidth inference**:
+
+- Configured the Linux host, GPU drivers, thermal curves, and quantized inference runtimes for unattended multi-hour agent runs.
+- Evaluated open-weight model families — focusing on **Qwen** and **Gemma** — across quantization levels (`Q4_K_M`, `Q5_K_M`, `Q8_0`) to find the sweet spot between **tokens per second**, context window stability, and structured tool-call accuracy.
+
+> "In an autonomous loop, a 5% drop in tool-call JSON reliability compounds across ten steps into a failed run. Benchmarking real multi-step tasks matters far more than static perplexity numbers."
+
+## Autonomous Agent Orchestration
+
+On top of the local inference layer, I deployed and tested two agentic frameworks side by side:
+
+### 01 // Hermes Agent
+Configured structured tool definitions, system prompts, and memory persistence so local models could decompose goals, execute shell/file operations inside an isolated sandbox, and self-correct when a command returned an error.
+
+### 02 // OpenClaw
+Deployed **OpenClaw** workflows to test autonomous task routing, workspace inspection, and iterative verification against local model endpoints without external API calls.
+
+## Key Outcomes & Takeaways
+
+- **Zero external API dependency:** All prompts, context windows, and tool outputs remain inside the local network.
+- **Repeatable benchmark harness:** Built a practical evaluation matrix comparing Qwen and Gemma variants on real agentic tasks (latency to first token, sustained tok/s, and multi-turn tool accuracy).
+- **Hardware-to-agent ownership:** Demonstrated full vertical ownership from assembling the server hardware to tuning agent prompts and sandboxes.

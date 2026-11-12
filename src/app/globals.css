@@ -1,0 +1,227 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
+/* ───────────────────────── Design tokens ───────────────────────── */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-canvas: #0a0b0d;
+  --bg-surface: #121417;
+  --bg-elevated: #181b1f;
+  --text-primary: #f2f0eb;
+  --text-secondary: #b4b7bd;
+  --text-muted: #8a8f98;
+  --accent-signal: #ff5a36;
+  --accent-telemetry: #3df5c4;
+  --accent-blueprint: #4fa8ff;
+  --grid: rgb(255 255 255 / 0.06);
+  --grid-strong: rgb(255 255 255 / 0.14);
+  --glow: rgb(61 245 196 / 0.18);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg-canvas: #f6f4ef;
+  --bg-surface: #ece8e0;
+  --bg-elevated: #ffffff;
+  --text-primary: #141413;
+  --text-secondary: #46433e;
+  --text-muted: #6b6760;
+  --accent-signal: #c84b31;
+  --accent-telemetry: #0b7a63;
+  --accent-blueprint: #0b4f8a;
+  --grid: rgb(0 0 0 / 0.07);
+  --grid-strong: rgb(0 0 0 / 0.16);
+  --glow: rgb(11 122 99 / 0.12);
+}
+
+@theme inline {
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-elevated: var(--bg-elevated);
+  --color-ink: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-signal: var(--accent-signal);
+  --color-telemetry: var(--accent-telemetry);
+  --color-blueprint: var(--accent-blueprint);
+  --color-grid: var(--grid);
+  --color-grid-strong: var(--grid-strong);
+
+  --font-sans: var(--font-sans-ui), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif-editorial), Georgia, serif;
+  --font-mono: var(--font-mono-tech), ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+@layer base {
+  html {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    background: var(--accent-signal);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-telemetry);
+    outline-offset: 3px;
+  }
+}
+
+/* ───────────────────────── Utilities ───────────────────────── */
+@utility hud {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Faint engineering grid used as a section backdrop. */
+@utility bg-blueprint-grid {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Topographic contour pattern (CSS-only fallback for the 3D terrain). */
+@utility bg-topo {
+  background-image:
+    repeating-radial-gradient(
+      ellipse at 70% 40%,
+      transparent 0 22px,
+      var(--grid-strong) 22px 23px
+    ),
+    repeating-radial-gradient(
+      ellipse at 20% 85%,
+      transparent 0 30px,
+      var(--grid) 30px 31px
+    );
+}
+
+/* Card surface with hairline border. */
+@utility panel {
+  background-color: color-mix(in oklab, var(--bg-elevated) 82%, transparent);
+  border: 1px solid var(--grid-strong);
+  backdrop-filter: blur(10px);
+}
+
+/* ───────────────────────── Animations ───────────────────────── */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent-telemetry) 60%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@keyframes scan {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+/* ───────────────────────── View transitions ───────────────────────── */
+::view-transition-group(.morph) {
+  animation-duration: 450ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+
+@keyframes via-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+::view-transition-old(.page-exit) {
+  animation: 180ms ease-out both vt-fade reverse;
+}
+
+::view-transition-new(.page-enter) {
+  animation:
+    260ms ease-out 120ms both vt-fade,
+    420ms cubic-bezier(0.22, 1, 0.36, 1) both vt-rise;
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vt-rise {
+  from {
+    transform: translateY(16px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ───────────────────────── Reduced motion ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
