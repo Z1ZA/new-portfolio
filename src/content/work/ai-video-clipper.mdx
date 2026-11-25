@@ -1,0 +1,16 @@
+> End-to-end multimodal web application designed to turn long-form podcasts, talks, and founder updates into ready-to-post vertical shorts.
+
+## Overview
+
+Content teams and founders sit on hours of valuable long-form recordings, yet manual scrubbing, reframing, and captioning takes hours per video. I built an **AI Video Clipper web app** that automates the pipeline from raw source video to social-ready 9:16, 1:1, and 16:9 exports.
+
+## Key Engineering Decisions
+
+- **Word-Level Speech Alignment:** Transcribes audio with **Whisper** to obtain millisecond-accurate word timestamps, ensuring cuts always land on natural sentence boundaries rather than mid-syllable.
+- **LLM Hook & Retention Scoring:** Evaluates transcript windows to rank strong openings, contrarian statements, and concise insights instead of picking arbitrary timestamps.
+- **Speaker-Aware Reframing & Burned Captions:** Tracks the active speaker inside the source frame for vertical 9:16 crops and renders word-synced karaoke subtitles directly via **FFmpeg**.
+
+## Outcome
+
+- Compresses hours of manual video clipping into a fast review-and-export loop inside a clean Next.js studio interface.
+- Demonstrates full vertical ownership across frontend timeline controls, LLM ranking prompts, and media processing pipelines.

@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
 import { PROFILE } from "@/content/profile";
-import { RACE_STATS } from "@/content/races";
 
 export const alt = `${PROFILE.name} — Software & AI Engineer (Bib #${PROFILE.bib})`;
 export const size = { width: 1200, height: 630 };
@@ -47,7 +46,7 @@ export default function OpengraphImage() {
               {PROFILE.roleHeadline}
             </div>
             <div style={{ display: "flex", fontSize: 22, color: "#b4b7bd", marginTop: 20, lineHeight: 1.4 }}>
-              {`Local LLM Infrastructure (Hermes, OpenClaw) · Next.js Full-Stack Systems · ${RACE_STATS.longestKm} KM Ultra-Trail Finisher`}
+              Local LLM Infrastructure (Hermes, OpenClaw) · Next.js Full-Stack Systems · Ultra-Trail Endurance Athlete
             </div>
           </div>
 
@@ -70,7 +69,7 @@ export default function OpengraphImage() {
               {PROFILE.bib}
             </div>
             <div style={{ display: "flex", fontSize: 18, fontWeight: 700, color: "#c84b31", marginTop: 8 }}>
-              {`GPA ${PROFILE.gpa}/4.00`}
+              ULTRA RUNNER
             </div>
           </div>
         </div>

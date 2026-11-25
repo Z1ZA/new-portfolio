@@ -120,11 +120,10 @@
     );
 }
 
-/* Card surface with hairline border. */
+/* Card surface with hairline border (no backdrop-filter to avoid GPU compositor spikes). */
 @utility panel {
-  background-color: color-mix(in oklab, var(--bg-elevated) 82%, transparent);
+  background-color: color-mix(in oklab, var(--bg-elevated) 94%, transparent);
   border: 1px solid var(--grid-strong);
-  backdrop-filter: blur(10px);
 }
 
 /* ───────────────────────── Animations ───────────────────────── */

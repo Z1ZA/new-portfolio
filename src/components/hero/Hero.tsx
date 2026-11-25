@@ -1,172 +1,105 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
+import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
-import { Accent } from "@/components/ui/SectionHeader";
 import { PROFILE } from "@/content/profile";
-import { RACE_STATS } from "@/content/races";
-import { useCanRender3D, useInView } from "@/lib/hooks";
-import { BadgeFallback } from "./BadgeFallback";
 
-const TerrainCanvas = dynamic(() => import("./HeroCanvas").then((m) => m.TerrainCanvas), {
-  ssr: false,
-});
-
-const LanyardCanvas = dynamic(() => import("./HeroCanvas").then((m) => m.LanyardCanvas), {
-  ssr: false,
-});
+const TICKER = ["Local LLM", "MCP Agents", "Next.js", "Bali, ID", "Open to Relocation"];
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const inView = useInView(sectionRef, "150px");
-  const can3D = useCanRender3D();
-  const [badgeReady, setBadgeReady] = useState(false);
-  const [flipped, setFlipped] = useState(false);
+  const reduce = useReducedMotion();
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 60, damping: 18 });
+  const sy = useSpring(my, { stiffness: 60, damping: 18 });
+  // Runner drifts with the cursor; the giant name moves the opposite way for depth.
+  const runnerX = useTransform(sx, (v) => v * 18);
+  const runnerY = useTransform(sy, (v) => v * 10);
+  const nameX = useTransform(sx, (v) => v * -10);
 
-  const toggleFlip = () => setFlipped((f) => !f);
+  function onMove(e: React.PointerEvent<HTMLElement>) {
+    if (reduce || e.pointerType === "touch") return;
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - r.left) / r.width - 0.5);
+    my.set((e.clientY - r.top) / r.height - 0.5);
+  }
 
   return (
     <section
-      ref={sectionRef}
       id="start"
       aria-labelledby="hero-heading"
-      className="relative min-h-[calc(100dvh-4rem)] overflow-hidden border-b border-grid pt-20 pb-16 sm:pt-24 sm:pb-24"
+      onPointerMove={onMove}
+      className="relative flex min-h-dvh flex-col overflow-hidden border-b border-grid pt-16"
     >
-      {/* Instant CSS contour backdrop + lazy 3D terrain shader */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-topo opacity-60" />
-      {can3D && (
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
-          <TerrainCanvas active={inView} />
-        </div>
-      )}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-canvas to-transparent"
-      />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-topo opacity-50" />
 
-      <div className="relative z-10 mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-12 px-4 sm:px-8 lg:grid-cols-12 lg:gap-8">
-        {/* Left column — Dossier & CTAs (30-second recruiter rule) */}
-        <div className="lg:col-span-7">
-          {/* HUD status strip */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="hud inline-flex items-center gap-2 border border-grid-strong bg-elevated/80 px-2.5 py-1 text-ink backdrop-blur">
-              <span className="size-2 rounded-full bg-telemetry animate-pulse-dot" aria-hidden="true" />
-              Start Line · KM 00.0
-            </span>
-            <span className="hud inline-flex items-center gap-1.5 border border-grid-strong bg-surface/70 px-2.5 py-1 text-telemetry">
-              Status: {PROFILE.relocation}
-            </span>
-            <span className="hud hidden border border-grid-strong bg-surface/70 px-2.5 py-1 text-muted sm:inline-flex">
-              GPS {PROFILE.coordinates} · {PROFILE.location}
-            </span>
-          </div>
-
-          <p className="hud mt-6 text-signal">
-            {PROFILE.degreeTitle} — {PROFILE.roleHeadline}
-          </p>
-
-          <h1
+      <div className="relative flex flex-1 flex-col items-center justify-center px-4 pb-6 text-center">
+        {/* Giant name with the runner standing in front of it */}
+        <div className="relative w-full max-w-[1400px]">
+          <motion.h1
             id="hero-heading"
-            className="mt-3 text-4xl leading-[1.04] font-extrabold tracking-tight text-balance sm:text-6xl xl:text-[4.1rem]"
+            style={{ x: nameX }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="select-none text-[clamp(4.5rem,20vw,17rem)] leading-[0.82] font-black tracking-tighter text-ink uppercase"
           >
-            Engineering <Accent>autonomous local AI</Accent> &amp; full-stack web systems with{" "}
-            <Accent>ultra-distance</Accent> grit.
-          </h1>
+            <span className="block">Abdul</span>
+            <span className="block">Aziz</span>
+          </motion.h1>
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-secondary sm:text-lg">
-            {PROFILE.summary}
-          </p>
-
-          {/* Primary CTAs */}
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink href={PROFILE.cvPdfPath} variant="primary" download>
-              Download 1-Page CV (PDF) ↓
-            </ButtonLink>
-            <ButtonLink href="#systems" variant="outline">
-              Explore Systems (CP02) →
-            </ButtonLink>
-            <ButtonLink href={PROFILE.github} variant="outline" external>
-              GitHub ({PROFILE.githubHandle})
-            </ButtonLink>
-            <ButtonLink href={PROFILE.linkedin} variant="outline" external>
-              LinkedIn
-            </ButtonLink>
-          </div>
-
-          {/* Quick telemetry readout bar */}
-          <dl className="mt-10 grid grid-cols-2 gap-3 border-t border-grid pt-6 sm:grid-cols-4">
-            <div>
-              <dt className="hud text-muted">Informatics GPA</dt>
-              <dd className="mt-1 font-mono text-xl font-bold text-ink tabular">
-                {PROFILE.gpa}
-                <span className="text-sm text-muted">/4.00</span>
-              </dd>
-            </div>
-            <div>
-              <dt className="hud text-muted">AI Focus</dt>
-              <dd className="mt-1 font-mono text-sm font-semibold text-telemetry">
-                Hermes · OpenClaw · Local LLM
-              </dd>
-            </div>
-            <div>
-              <dt className="hud text-muted">Longest Race</dt>
-              <dd className="mt-1 font-mono text-xl font-bold text-signal tabular">
-                {RACE_STATS.longestKm} KM Ultra
-              </dd>
-            </div>
-            <div>
-              <dt className="hud text-muted">Verified Distance</dt>
-              <dd className="mt-1 font-mono text-xl font-bold text-ink tabular">
-                {RACE_STATS.totalKm} KM{" "}
-                <span className="text-xs font-normal text-muted">({RACE_STATS.finished} races)</span>
-              </dd>
-            </div>
-          </dl>
+          <motion.div
+            style={{ x: runnerX, y: runnerY }}
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none absolute inset-y-[-6%] left-1/2 w-[34%] max-w-[420px] min-w-[170px] -translate-x-1/2"
+          >
+            <Image
+              src="/images/runner.png"
+              alt={`${PROFILE.name} running`}
+              fill
+              priority
+              sizes="(max-width: 768px) 40vw, 420px"
+              className="object-contain object-bottom drop-shadow-[0_18px_40px_rgba(255,90,54,0.35)]"
+            />
+          </motion.div>
         </div>
 
-        {/* Right column — Interactive 3D Lanyard Race-Bib ID Badge */}
-        <div className="relative flex flex-col items-center lg:col-span-5">
-          <div className="relative flex h-[520px] w-full items-center justify-center sm:h-[560px]">
-            {/* Fallback renders on SSR and stays visible until WebGL canvas reports ready */}
-            <div
-              className={`transition-opacity duration-500 ${
-                can3D && badgeReady ? "pointer-events-none absolute inset-0 opacity-0" : "opacity-100"
-              }`}
-            >
-              <BadgeFallback flipped={flipped} onToggleFlip={toggleFlip} />
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.6 }}
+          className="relative z-10 mt-8 flex flex-col items-center"
+        >
+          <p className="max-w-xl text-base text-secondary sm:text-lg">
+            Software and AI Engineer, love endurance sport
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <ButtonLink href="#systems" variant="primary">
+              View Work
+            </ButtonLink>
+            <ButtonLink href={PROFILE.cvPdfPath} variant="outline" download>
+              Download CV
+            </ButtonLink>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Ticker */}
+      <div className="relative overflow-hidden border-t border-grid bg-canvas/80 py-3" aria-hidden="true">
+        <div className="animate-marquee flex w-max items-center whitespace-nowrap">
+          {[0, 1].map((n) => (
+            <div key={n} className="flex items-center">
+              {[...TICKER, ...TICKER].map((t, i) => (
+                <span key={`${n}-${i}`} className="hud flex items-center text-secondary">
+                  <span className="px-6 text-base sm:text-lg">{t}</span>
+                  <span className="text-telemetry">●</span>
+                </span>
+              ))}
             </div>
-
-            {can3D && (
-              <div
-                aria-hidden="true"
-                className={`absolute inset-0 transition-opacity duration-500 ${
-                  badgeReady ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                <LanyardCanvas
-                  active={inView}
-                  flipped={flipped}
-                  onToggleFlip={toggleFlip}
-                  onReady={() => setBadgeReady(true)}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Interactive hint + keyboard-accessible flip trigger */}
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-            <span className="hud text-muted">
-              {can3D ? "Drag & fling lanyard · Click badge to flip" : "Hover to tilt · Click badge to flip"}
-            </span>
-            <button
-              type="button"
-              onClick={toggleFlip}
-              className="hud border border-grid-strong bg-elevated/80 px-3 py-1.5 text-telemetry transition-colors hover:border-telemetry hover:bg-surface"
-            >
-              Flip Bib #{PROFILE.bib} ({flipped ? "Show Front" : "Show Dossier"}) ↻
-            </button>
-          </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,112 +1,124 @@
+export type CaseStudySlug =
+  | "ai-video-clipper"
+  | "motion-video-skills"
+  | "company-business-dashboard"
+  | "local-ai-agent-sandbox";
+
 export interface CaseStudyMeta {
-  slug: "ai-sandbox" | "widya-robotics" | "synrgy-ticketing";
+  slug: CaseStudySlug;
   code: string;
   title: string;
   org: string;
   location: string;
   role: string;
   period: string;
-  category: "AI Infrastructure" | "Production Web" | "Full-Stack Product";
-  headlineMetric: string;
+  category: string;
+  tagline: string;
   summary: string;
-  highlights: string[];
   stack: string[];
-  architectureNodes: { label: string; sub: string }[];
   metrics: { label: string; value: string; note: string }[];
+  architectureNodes: { label: string; sub: string }[];
 }
 
 export const CASE_STUDIES: CaseStudyMeta[] = [
   {
-    slug: "ai-sandbox",
-    code: "SYS-01",
-    title: "Self-Hosted Local LLM Server & Autonomous Agent Sandbox",
-    org: "Freelance (Partnered with Canadian Co-Founder of Measurand / Orica)",
+    slug: "ai-video-clipper",
+    code: "01",
+    title: "AI Video Clipper Web App",
+    org: "Independent AI Product Build",
+    location: "Bali, Indonesia",
+    role: "Full-Stack & AI Engineer",
+    period: "2025 – 2026",
+    category: "AI Web App · Multimodal",
+    tagline: "Turns long-form videos & podcasts into viral vertical shorts automatically",
+    summary:
+      "End-to-end web application that ingests long-form talks or podcasts, scores high-retention hooks with LLMs, auto-reframes active speakers to 9:16, and burns synchronized kinetic captions.",
+    stack: ["Next.js", "TypeScript", "FFmpeg", "Whisper STT", "LLM Hook Scoring", "Tailwind CSS"],
+    metrics: [
+      { label: "Format Output", value: "9:16 / 1:1 / 16:9", note: "Auto-reframed speaker crop" },
+      { label: "Hook Detection", value: "LLM Scored", note: "Ranks top viral segments" },
+      { label: "Captions", value: "Word-Sync", note: "Animated karaoke subtitles" },
+    ],
+    architectureNodes: [
+      { label: "Ingest & STT", sub: "Word-level timestamps" },
+      { label: "Hook Ranker", sub: "LLM virality scoring" },
+      { label: "Smart Reframe", sub: "9:16 speaker tracking" },
+      { label: "Render Engine", sub: "Burned captions & MP4" },
+    ],
+  },
+  {
+    slug: "motion-video-skills",
+    code: "02",
+    title: "Programmatic Motion Video Skills",
+    org: "AI Agent Skills & Creative Engineering",
+    location: "Bali, Indonesia",
+    role: "AI Automation & Motion Developer",
+    period: "2025 – 2026",
+    category: "Agent Skills · Motion Video",
+    tagline: "Reusable AI agent skills that turn briefs into 60fps motion graphics",
+    summary:
+      "Engineered modular motion-video skills allowing autonomous AI agents to compose multi-track timelines, spring typography, data reveals, and branded MP4 exports from plain-text prompts.",
+    stack: ["Agent Skills", "TypeScript", "React Motion", "Timeline JSON", "FFmpeg", "MCP"],
+    metrics: [
+      { label: "Frame Rate", value: "60 FPS", note: "Deterministic spring physics" },
+      { label: "Workflow", value: "Prompt → MP4", note: "Agent-driven scene graph" },
+      { label: "Reusability", value: "Modular", note: "Plug-and-play skill packs" },
+    ],
+    architectureNodes: [
+      { label: "Brief / Prompt", sub: "Structured scene intent" },
+      { label: "Motion Skill", sub: "Layout & timing rules" },
+      { label: "Timeline Graph", sub: "Multi-track keyframes" },
+      { label: "Video Export", sub: "1080p60 MP4 output" },
+    ],
+  },
+  {
+    slug: "company-business-dashboard",
+    code: "03",
+    title: "Company Business & Operations Dashboard",
+    org: "Operations & Full-Stack Engineering (Linda Dessert / Enterprise)",
+    location: "Bali, Indonesia",
+    role: "Full-Stack Developer & Operations Manager",
+    period: "Oct 2024 – 2026",
+    category: "Full-Stack · Business Ops",
+    tagline: "Unified cockpit for revenue, multi-channel orders, and daily production",
+    summary:
+      "Designed from real experience supervising daily production and online sales in Bali: brings store revenue, channel mix, fulfillment SLAs, and batch queues into one clear executive view.",
+    stack: ["Next.js", "TypeScript", "PostgreSQL", "Analytics UI", "Tailwind CSS", "REST API"],
+    metrics: [
+      { label: "Visibility", value: "Real-Time", note: "Sales + kitchen queue unified" },
+      { label: "Channels", value: "Store + Online", note: "Consolidated Bali orders" },
+      { label: "Decision Speed", value: "Instant", note: "Zero spreadsheet lag" },
+    ],
+    architectureNodes: [
+      { label: "POS & Online", sub: "Order intake streams" },
+      { label: "PostgreSQL", sub: "Normalized ops ledger" },
+      { label: "Production Queue", sub: "Live batch tracking" },
+      { label: "Executive UI", sub: "KPIs & channel trends" },
+    ],
+  },
+  {
+    slug: "local-ai-agent-sandbox",
+    code: "04",
+    title: "Self-Hosted AI Agent & MCP Sandbox",
+    org: "Freelance (with Co-Founder of Measurand / Orica)",
     location: "Bali, Indonesia",
     role: "AI Project Developer",
-    period: "Oct 2024 – Sep 2026",
-    category: "AI Infrastructure",
-    headlineMetric: "Hermes Agent & OpenClaw · Local Qwen & Gemma",
+    period: "Oct 2024 – Oct 2026",
+    category: "Local LLM · Agents & MCP",
+    tagline: "Zero-cloud autonomous agents running on custom local GPU hardware",
     summary:
-      "Designed and assembled custom local LLM server hardware to run zero-cloud-dependency autonomous agents with Hermes Agent and OpenClaw, benchmarking open-weight models for latency, tool-calling reliability, and privacy.",
-    highlights: [
-      "Partnered directly with a Canadian co-founder of Measurand / Orica to architect, build, and stress-test an experimental AI sandbox.",
-      "Assembled custom workstation-grade local LLM server hardware tuned for sustained multi-hour agent loops and high VRAM bandwidth.",
-      "Deployed self-hosted autonomous agents using Hermes Agent and OpenClaw with sandboxed tool execution.",
-      "Benchmarked Qwen and Gemma model families across quantization tiers to balance tokens/sec against reasoning accuracy.",
-    ],
-    stack: ["Local LLM Server", "Hermes Agent", "OpenClaw", "Qwen", "Gemma", "Linux", "Benchmarking"],
-    architectureNodes: [
-      { label: "Task Orchestrator", sub: "Hermes Agent / OpenClaw" },
-      { label: "Local Inference Engine", sub: "Quantized Qwen & Gemma" },
-      { label: "Sandboxed Tool Runner", sub: "Filesystem, Shell & Web" },
-      { label: "Telemetry & Eval Harness", sub: "Tok/s · Tool Accuracy" },
-    ],
+      "Partnered with a Canadian co-founder of Measurand (Orica) to build a custom local AI server, benchmark open-weight LLMs (Qwen, Gemma, GLM), and run Hermes & OpenClaw agents with custom MCP tools.",
+    stack: ["Local LLM Server", "MCP", "Hermes", "OpenClaw", "Qwen · Gemma · GLM", "Linux"],
     metrics: [
-      { label: "Cloud Dependency", value: "0%", note: "100% local weights & private execution" },
-      { label: "Agent Frameworks", value: "2", note: "Hermes Agent & OpenClaw side-by-side" },
-      { label: "Model Families", value: "Qwen + Gemma", note: "Benchmarked across quantization levels" },
+      { label: "Data Privacy", value: "100% Local", note: "Zero external API leakage" },
+      { label: "Models Tested", value: "Qwen · Gemma · GLM", note: "Tuned for tool reliability" },
+      { label: "Agent Runtimes", value: "Hermes + OpenClaw", note: "Custom skills & MCP" },
     ],
-  },
-  {
-    slug: "widya-robotics",
-    code: "SYS-02",
-    title: "Modular Robotics Web Platform & Headless CMS Pipeline",
-    org: "Widya Robotics",
-    location: "Yogyakarta, Indonesia",
-    role: "Frontend Developer",
-    period: "Feb 2024 – Jun 2024",
-    category: "Production Web",
-    headlineMetric: "Next.js · Strapi CMS · PostgreSQL · GitLab",
-    summary:
-      "Engineered responsive product and company web applications backed by Strapi Headless CMS and PostgreSQL, enabling non-technical teams to publish updates while keeping frontend performance crisp.",
-    highlights: [
-      "Built responsive, production-grade Next.js interfaces for industrial AI and robotics product lines.",
-      "Integrated Strapi CMS and PostgreSQL content schemas so marketing and product teams could ship pages without developer bottlenecks.",
-      "Collaborated closely with UI/UX designers to translate Figma design systems into reusable React components.",
-      "Maintained clean merge request workflows, code reviews, and branch hygiene in GitLab.",
-    ],
-    stack: ["Next.js", "React", "TypeScript", "Strapi CMS", "PostgreSQL", "Tailwind CSS", "GitLab"],
     architectureNodes: [
-      { label: "UI/UX Design System", sub: "Figma Component Tokens" },
-      { label: "Next.js Frontend", sub: "SSR / Static Hybrid" },
-      { label: "Strapi Headless CMS", sub: "REST Content API" },
-      { label: "PostgreSQL Database", sub: "Relational Content Store" },
-    ],
-    metrics: [
-      { label: "Core Stack", value: "Next.js + Strapi", note: "Decoupled headless publishing" },
-      { label: "Database", value: "PostgreSQL", note: "Structured relational schemas" },
-      { label: "Workflow", value: "GitLab CI", note: "Cross-division UI/UX & engineering" },
-    ],
-  },
-  {
-    slug: "synrgy-ticketing",
-    code: "SYS-03",
-    title: "Full-Stack Airline Ticketing & Seat Reservation System",
-    org: "SYNRGY Academy (BCA × Binar Academy)",
-    location: "Indonesia",
-    role: "Full-Stack Developer",
-    period: "Aug 2023 – Mar 2024",
-    category: "Full-Stack Product",
-    headlineMetric: "Full-Stack JavaScript · Agile Scrum",
-    summary:
-      "Delivered an end-to-end flight search, seat selection, checkout, and e-ticket platform in a cross-functional Agile Scrum squad during the intensive BCA × Binar Academy bootcamp.",
-    highlights: [
-      "Worked in cross-division Scrum sprints (Frontend, Backend, QA, UI/UX) from product backlog to final showcase.",
-      "Implemented flight search filtering, multi-step passenger booking flows, and responsive checkout screens.",
-      "Connected RESTful booking endpoints, authentication, and real-time status notifications.",
-      "Practiced automated testing, clean JavaScript architecture, and sprint retrospectives.",
-    ],
-    stack: ["JavaScript", "React", "Node.js", "REST API", "Agile Scrum", "Responsive UI"],
-    architectureNodes: [
-      { label: "Search & Filter UI", sub: "Routes, Dates & Fare Tiers" },
-      { label: "Booking State Machine", sub: "Passenger & Seat Hold" },
-      { label: "REST API Layer", sub: "Auth, Orders & Notifications" },
-      { label: "E-Ticket Issuance", sub: "Verified Booking Record" },
-    ],
-    metrics: [
-      { label: "Methodology", value: "Agile Scrum", note: "Cross-division squad delivery" },
-      { label: "Scope", value: "End-to-End", note: "Search → Seat Hold → E-Ticket" },
-      { label: "Program", value: "BCA × Binar", note: "7-month intensive engineering track" },
+      { label: "Agent Loop", sub: "Hermes & OpenClaw" },
+      { label: "Custom Skills", sub: "MCP tool integrations" },
+      { label: "Local Inference", sub: "Qwen, Gemma & GLM" },
+      { label: "Custom Rig", sub: "Self-hosted GPU server" },
     ],
   },
 ];

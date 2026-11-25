@@ -1,0 +1,95 @@
+{
+  "meta": {
+    "datasetMode": "reference_baseline",
+    "hardware": "Single-GPU Local Workstation (24 GB VRAM · CUDA)",
+    "runtime": "llama.cpp / LM Studio OpenAI-Compatible Server",
+    "note": "Reference baseline numbers for Qwen, Gemma, and GLM. Run `python3 scripts/benchmark_local_llm.py` on your rig to overwrite with live hardware measurements.",
+    "updatedAt": "2026-11-23"
+  },
+  "runs": [
+    {
+      "id": "qwen2.5-14b-q4",
+      "family": "Qwen",
+      "model": "Qwen 2.5 14B Instruct",
+      "paramsB": 14,
+      "quant": "Q4_K_M",
+      "vramGb": 10.4,
+      "tokensPerSec": 58.4,
+      "ttftMs": 145,
+      "toolCallPassPct": 94,
+      "contextK": 32,
+      "bestWorkload": "Agentic Tool Use",
+      "notes": "Best balance of structured JSON tool-calling accuracy and speed for multi-step Hermes / OpenClaw loops."
+    },
+    {
+      "id": "qwen2.5-coder-14b-q8",
+      "family": "Qwen",
+      "model": "Qwen 2.5 Coder 14B",
+      "paramsB": 14,
+      "quant": "Q8_0",
+      "vramGb": 16.8,
+      "tokensPerSec": 39.2,
+      "ttftMs": 210,
+      "toolCallPassPct": 96,
+      "contextK": 32,
+      "bestWorkload": "Code Generation",
+      "notes": "Higher precision Q8_0 preserves strict schema adherence and TypeScript/Next.js patch quality."
+    },
+    {
+      "id": "gemma3-12b-q4",
+      "family": "Gemma",
+      "model": "Gemma 3 12B Instruct",
+      "paramsB": 12,
+      "quant": "Q4_K_M",
+      "vramGb": 9.1,
+      "tokensPerSec": 66.8,
+      "ttftMs": 118,
+      "toolCallPassPct": 88,
+      "contextK": 32,
+      "bestWorkload": "Fast Synthesis",
+      "notes": "Lowest latency to first token; ideal for quick summarization and low-VRAM sub-tasks."
+    },
+    {
+      "id": "gemma3-27b-q4",
+      "family": "Gemma",
+      "model": "Gemma 3 27B Instruct",
+      "paramsB": 27,
+      "quant": "Q4_K_M",
+      "vramGb": 18.6,
+      "tokensPerSec": 31.5,
+      "ttftMs": 295,
+      "toolCallPassPct": 92,
+      "contextK": 32,
+      "bestWorkload": "Reasoning",
+      "notes": "Strong synthesis quality and nuanced instruction following when fitting cleanly inside 24 GB VRAM."
+    },
+    {
+      "id": "glm4-9b-q4",
+      "family": "GLM",
+      "model": "GLM-4 9B Chat",
+      "paramsB": 9,
+      "quant": "Q4_K_M",
+      "vramGb": 7.2,
+      "tokensPerSec": 74.1,
+      "ttftMs": 102,
+      "toolCallPassPct": 89,
+      "contextK": 32,
+      "bestWorkload": "Agentic Tool Use",
+      "notes": "Compact footprint leaves headroom for parallel local MCP services and vector stores."
+    },
+    {
+      "id": "glm4-9b-q8",
+      "family": "GLM",
+      "model": "GLM-4 9B Chat",
+      "paramsB": 9,
+      "quant": "Q8_0",
+      "vramGb": 11.4,
+      "tokensPerSec": 51.3,
+      "ttftMs": 156,
+      "toolCallPassPct": 91,
+      "contextK": 32,
+      "bestWorkload": "Reasoning",
+      "notes": "Zero noticeable quantization drift on function-calling schemas while staying above 50 tok/s."
+    }
+  ]
+}

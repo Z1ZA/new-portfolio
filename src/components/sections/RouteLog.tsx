@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useSpring } from "motion/react";
+import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { useRef, useState } from "react";
 import { Chip } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
@@ -39,6 +39,8 @@ const AREA_PATH = `${LINE_PATH} L ${POINTS[POINTS.length - 1].x} ${SVG_H - 16} L
 export function RouteLog() {
   const containerRef = useRef<HTMLElement>(null);
   const [selectedId, setSelectedId] = useState<string>(RECORDS[0].id);
+  const [showAll, setShowAll] = useState(false);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start 80%", "end 30%"],
@@ -57,22 +59,20 @@ export function RouteLog() {
       <div className="mx-auto max-w-[1400px] px-4 sm:px-8">
         <SectionHeader
           id="route-heading"
-          code="CP03"
-          km={32}
-          kicker="Career Elevation Profile & Chronological Ledger"
+          code="CP02"
+          kicker="Career Elevation Profile"
           title={
             <>
               Every role is a <Accent>waypoint</Accent> on the climb.
             </>
           }
-          intro="From leading open-source research at university to shipping production Next.js platforms and assembling self-hosted AI agent servers in Bali. Select any waypoint on the elevation profile or browse the complete ledger below."
         />
 
         {/* Interactive SVG Elevation Profile */}
         <Reveal className="panel overflow-hidden p-4 sm:p-6">
           <div className="hud mb-3 flex flex-wrap items-center justify-between gap-2 text-muted">
             <span>ELEVATION GAIN // 2022 → 2026 CAREER ROUTE</span>
-            <span className="text-telemetry">CLICK OR FOCUS A WAYPOINT TO INSPECT</span>
+            <span className="text-telemetry">SELECT ANY WAYPOINT NODE (WP01–WP08)</span>
           </div>
 
           <div className="overflow-x-auto pb-2">
@@ -89,7 +89,6 @@ export function RouteLog() {
                 </linearGradient>
               </defs>
 
-              {/* Horizontal altitude gridlines */}
               {[0.25, 0.5, 0.75].map((t) => {
                 const gy = PAD_Y + t * (SVG_H - PAD_Y * 2);
                 return (
@@ -105,13 +104,9 @@ export function RouteLog() {
                 );
               })}
 
-              {/* Shaded elevation area */}
               <path d={AREA_PATH} fill="url(#elevFill)" />
-
-              {/* Unfilled baseline route */}
               <path d={LINE_PATH} fill="none" stroke="var(--grid-strong)" strokeWidth={2} />
 
-              {/* Scroll-drawn active telemetry route */}
               <motion.path
                 d={LINE_PATH}
                 fill="none"
@@ -120,7 +115,6 @@ export function RouteLog() {
                 style={{ pathLength }}
               />
 
-              {/* Waypoint nodes */}
               {POINTS.map((pt, idx) => {
                 const isSelected = pt.id === selectedId;
                 return (
@@ -138,7 +132,6 @@ export function RouteLog() {
                     aria-label={`${pt.role} at ${pt.org} (${pt.period})`}
                     className="cursor-pointer focus:outline-none"
                   >
-                    {/* Vertical drop line */}
                     <line
                       x1={pt.x}
                       x2={pt.x}
@@ -149,7 +142,6 @@ export function RouteLog() {
                       strokeDasharray="2 3"
                     />
 
-                    {/* Outer pulse ring when active */}
                     {isSelected && (
                       <circle
                         cx={pt.x}
@@ -170,7 +162,6 @@ export function RouteLog() {
                       strokeWidth={2.5}
                     />
 
-                    {/* Waypoint code & org label */}
                     <text
                       x={pt.x}
                       y={pt.y - 14}
@@ -221,42 +212,58 @@ export function RouteLog() {
           </div>
         </Reveal>
 
-        {/* Full Chronological Ledger (all items visible for quick scanning) */}
-        <div className="mt-10 divide-y divide-grid border-y border-grid">
-          {RECORDS.map((item, idx) => {
-            const active = item.id === selectedId;
-            return (
-              <article
-                key={item.id}
-                onClick={() => setSelectedId(item.id)}
-                className={`grid cursor-pointer grid-cols-1 gap-3 py-5 transition-colors md:grid-cols-12 md:gap-6 ${
-                  active ? "bg-surface/40 px-3" : "hover:bg-surface/20"
-                }`}
-              >
-                <div className="hud md:col-span-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-signal">0{RECORDS.length - idx} // {item.type}</span>
-                  </div>
-                  <div className="mt-1 text-muted">{item.period}</div>
-                </div>
+        {/* Collapsible Full Ledger Toggle (prevents wall-of-text repetition) */}
+        <div className="mt-6">
+          <button
+            type="button"
+            onClick={() => setShowAll((s) => !s)}
+            aria-expanded={showAll}
+            className="hud inline-flex h-10 items-center gap-2 border border-grid-strong bg-elevated px-4 font-semibold text-ink transition-colors hover:border-telemetry hover:text-telemetry"
+          >
+            <span>{showAll ? "Hide Full Chronological Ledger ↑" : `Show Full Chronological Ledger (${RECORDS.length} entries) ↓`}</span>
+          </button>
 
-                <div className="md:col-span-9">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="text-base font-bold sm:text-lg">
-                      {item.org} <span className="font-normal text-muted">— {item.location}</span>
-                    </h3>
-                    <span className="font-mono text-xs text-telemetry">{item.role}</span>
-                  </div>
-                  {item.subNote && <p className="mt-0.5 text-xs text-muted">{item.subNote}</p>}
-                  <ul className="mt-2 space-y-1 pl-4 text-sm text-secondary list-disc">
-                    {item.details.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
+          <AnimatePresence initial={false}>
+            {showAll && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="mt-4 divide-y divide-grid border-y border-grid">
+                  {RECORDS.map((item, idx) => {
+                    const active = item.id === selectedId;
+                    return (
+                      <article
+                        key={item.id}
+                        onClick={() => setSelectedId(item.id)}
+                        className={`grid cursor-pointer grid-cols-1 gap-3 py-4 transition-colors md:grid-cols-12 md:gap-6 ${
+                          active ? "bg-surface/40 px-3" : "hover:bg-surface/20"
+                        }`}
+                      >
+                        <div className="hud md:col-span-3">
+                          <span className="text-signal">0{RECORDS.length - idx} // {item.type}</span>
+                          <div className="mt-0.5 text-muted">{item.period}</div>
+                        </div>
+
+                        <div className="md:col-span-9">
+                          <div className="flex flex-wrap items-baseline justify-between gap-2">
+                            <h3 className="text-base font-bold">
+                              {item.org} <span className="font-normal text-muted">— {item.location}</span>
+                            </h3>
+                            <span className="font-mono text-xs text-telemetry">{item.role}</span>
+                          </div>
+                          <p className="mt-1 text-sm text-secondary">{item.details[0]}</p>
+                        </div>
+                      </article>
+                    );
+                  })}
                 </div>
-              </article>
-            );
-          })}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>

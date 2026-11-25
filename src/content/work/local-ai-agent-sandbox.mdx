@@ -1,0 +1,16 @@
+> Freelance AI engineering engagement partnering with a Canadian co-founder of Measurand (Orica) to run autonomous agents entirely on local hardware.
+
+## Overview
+
+Cloud LLM APIs make early prototypes fast, but multi-step autonomous agents quickly hit unbounded token bills and strict data-residency boundaries. Partnering with a Canadian co-founder of **Measurand (Orica)**, I designed, assembled, and tested a **self-hosted AI sandbox** where open-weight models and tool-using agents run completely offline on custom local hardware.
+
+## Key Engineering Decisions
+
+- **Custom Local LLM Server Hardware:** Spec'd and assembled local GPU infrastructure tuned for sustained multi-hour inference and local context retention with zero external API leakage.
+- **Hermes & OpenClaw Agent Workflows:** Engineered custom **MCP integrations**, reusable skills, and sandboxed file/shell/browser workflows so agents can complete real multi-step tasks unattended.
+- **Model & Quantization Benchmarking:** Evaluated **Qwen**, **Gemma**, and **GLM** across practical agent workloads—prioritizing structured tool-calling reliability alongside tokens/sec and latency.
+
+## Outcome
+
+- Delivered a working local-first AI sandbox prototype with zero cloud dependency.
+- Built repeatable tooling for evaluating open-weight models and deploying reliable custom MCP workflows.

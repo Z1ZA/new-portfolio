@@ -27,7 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 const TITLE = `${PROFILE.name} — Software & AI Engineer | Operations & Endurance`;
 const DESCRIPTION =
-  "Portfolio of Abdul Aziz, S.Kom (B.Sc. Informatics, GPA 3.88/4.00). Self-hosted Local LLM Infrastructure, Autonomous Agents (Hermes, OpenClaw), Next.js Full-Stack Engineering, and 60 KM Ultra-Trail Finisher.";
+  "Portfolio of Abdul Aziz, S.Kom (B.Sc. Informatics, GPA 3.88/4.00). Self-hosted Local LLM Infrastructure, Autonomous Agents (Hermes, OpenClaw), Next.js Full-Stack Engineering, and Ultra-Trail Endurance Runner.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

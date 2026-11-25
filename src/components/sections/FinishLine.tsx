@@ -35,14 +35,12 @@ export function FinishLine() {
         <SectionHeader
           id="finish-heading"
           code="FINISH"
-          km={60}
           kicker="Course Complete · Initiate Contact"
           title={
             <>
               Let&apos;s cross the next <Accent>finish line</Accent> together.
             </>
           }
-          intro="Available for full-time Software & AI Engineering roles, Technical Operations, or ambitious contract builds — locally in Bali or relocating worldwide."
         />
 
         {/* Finish Arch & Interactive Break-the-Tape Banner */}
@@ -51,7 +49,7 @@ export function FinishLine() {
           className="panel relative overflow-hidden p-6 sm:p-10"
         >
           <div className="hud flex flex-wrap items-center justify-between gap-3 text-muted">
-            <span>FINISH ARCH // KM 60.0</span>
+            <span>FINISH LINE</span>
             <span className="text-telemetry">
               ● YOUR COURSE SPLIT: <strong className="text-ink">{formatSplit(elapsed)}</strong>
             </span>
@@ -87,7 +85,7 @@ export function FinishLine() {
                   textAnchor="middle"
                   className="fill-white font-mono text-[13px] font-bold tracking-[0.22em]"
                 >
-                  ABDUL AZIZ // 60 KM
+                  ABDUL AZIZ
                 </text>
               </g>
 
@@ -109,7 +107,7 @@ export function FinishLine() {
                   textAnchor="middle"
                   className="fill-white font-mono text-[13px] font-bold tracking-[0.22em]"
                 >
-                  FINISH LINE // HIRE
+                  LET&apos;S CONNECT
                 </text>
               </g>
             </svg>
@@ -144,10 +142,6 @@ export function FinishLine() {
             <ButtonLink href={PROFILE.github} variant="outline" external>
               GitHub ({PROFILE.githubHandle})
             </ButtonLink>
-
-            <ButtonLink href={PROFILE.cvPdfPath} variant="outline" download>
-              1-Page CV (PDF) ↓
-            </ButtonLink>
           </div>
         </Reveal>
 
@@ -157,7 +151,7 @@ export function FinishLine() {
             © {new Date().getFullYear()} {PROFILE.degreeTitle} · Bib #{PROFILE.bib}
           </span>
           <span>
-            Engineered with Next.js 16 · Tailwind v4 · React Three Fiber · Motion
+            Next.js · TypeScript · Tailwind CSS
           </span>
         </div>
       </div>

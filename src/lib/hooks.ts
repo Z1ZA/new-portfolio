@@ -33,15 +33,33 @@ export function useCanRender3D(): boolean | null {
   return ok;
 }
 
-/** True while `ref`'s element intersects the viewport. */
+/**
+ * True only when `ref`'s element is actually intersecting the viewport.
+ * Starts `false` so navigating to `#systems` ("Back to CP02") does not
+ * spin up off-screen WebGL contexts during route navigation.
+ */
 export function useInView<T extends Element>(ref: React.RefObject<T | null>, rootMargin = "0px") {
-  const [inView, setInView] = useState(true);
+  const [inView, setInView] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { rootMargin });
+    let timer: number | undefined;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        window.clearTimeout(timer);
+        if (entry.isIntersecting) {
+          timer = window.setTimeout(() => setInView(true), 80);
+        } else {
+          setInView(false);
+        }
+      },
+      { rootMargin },
+    );
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      window.clearTimeout(timer);
+      io.disconnect();
+    };
   }, [ref, rootMargin]);
   return inView;
 }

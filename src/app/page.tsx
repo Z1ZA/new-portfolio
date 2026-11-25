@@ -1,6 +1,5 @@
 import { Hero } from "@/components/hero/Hero";
 import { ProgressRail } from "@/components/hud/ProgressRail";
-import { AthleteProfile } from "@/components/sections/AthleteProfile";
 import { FinishLine } from "@/components/sections/FinishLine";
 import { FlagshipSystems } from "@/components/sections/FlagshipSystems";
 import { GearCheck } from "@/components/sections/GearCheck";
@@ -13,7 +12,6 @@ export default function HomePage() {
       <ProgressRail />
       <main id="main" className="bg-blueprint-grid">
         <Hero />
-        <AthleteProfile />
         <FlagshipSystems />
         <RouteLog />
         <GearCheck />
