@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { TopBar } from "@/components/hud/TopBar";
 import { Providers } from "@/components/providers";
 import { PROFILE, SITE_URL } from "@/content/profile";
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <TopBar />
           {children}
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
