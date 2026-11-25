@@ -149,7 +149,7 @@ export function FlagshipSystems() {
               <div
                 role="tablist"
                 aria-label="Flagship Projects and AI Assistant"
-                className="flex gap-2 overflow-x-auto border-b border-grid p-3 lg:col-span-3 lg:flex-col lg:gap-1.5 lg:border-r lg:border-b-0 lg:p-4"
+                className="no-scrollbar flex snap-x snap-mandatory gap-2 overflow-x-auto border-b border-grid p-3 lg:col-span-3 lg:flex-col lg:gap-1.5 lg:border-r lg:border-b-0 lg:p-4"
               >
                 {TABS.map((item, i) => {
                   const on = i === active;
@@ -160,7 +160,7 @@ export function FlagshipSystems() {
                       role="tab"
                       aria-selected={on}
                       onClick={() => setActive(i)}
-                      className={`relative min-w-[205px] shrink-0 border-l-2 px-4 py-3.5 text-left transition-colors lg:min-w-0 ${
+                      className={`relative min-w-[175px] snap-start shrink-0 border-l-2 px-4 py-3.5 text-left transition-colors sm:min-w-[205px] lg:min-w-0 ${
                         on
                           ? "border-signal bg-elevated"
                           : "border-transparent hover:border-grid-strong hover:bg-surface/60"

@@ -51,7 +51,7 @@ export default async function CaseStudyPage({
   const nextStudy = CASE_STUDIES[(currentIdx + 1) % CASE_STUDIES.length];
 
   return (
-    <main id="main" className="min-h-dvh pt-24 pb-24">
+    <main id="main" className="min-h-svh pt-24 pb-24">
       <div className="mx-auto max-w-4xl px-4 sm:px-8">
         <div className="mb-8 flex items-center justify-between">
           <Link

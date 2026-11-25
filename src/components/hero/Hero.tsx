@@ -30,20 +30,20 @@ export function Hero() {
       id="start"
       aria-labelledby="hero-heading"
       onPointerMove={onMove}
-      className="relative flex min-h-dvh flex-col overflow-hidden border-b border-grid pt-16"
+      className="relative flex min-h-svh flex-col overflow-hidden border-b border-grid pt-16"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-topo opacity-50" />
 
       <div className="relative flex flex-1 flex-col items-center justify-center px-4 pb-6 text-center">
         {/* Giant name with the runner standing in front of it */}
-        <div className="relative w-full max-w-[1400px]">
+        <div className="relative w-full max-w-[1400px] py-8 sm:py-0">
           <motion.h1
             id="hero-heading"
             style={{ x: nameX }}
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="select-none text-[clamp(4.5rem,20vw,17rem)] leading-[0.82] font-black tracking-tighter text-ink uppercase"
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+            className="select-none text-[clamp(4.25rem,20vw,17rem)] leading-[0.82] font-black tracking-tighter text-ink uppercase"
           >
             <span className="block">Abdul</span>
             <span className="block">Aziz</span>
@@ -51,26 +51,30 @@ export function Hero() {
 
           <motion.div
             style={{ x: runnerX, y: runnerY }}
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 36 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-none absolute inset-y-[-6%] left-1/2 w-[34%] max-w-[420px] min-w-[170px] -translate-x-1/2"
+            transition={{ duration: 0.85, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none absolute inset-y-[-8%] left-1/2 w-[44%] max-w-[420px] min-w-[160px] -translate-x-1/2 sm:inset-y-[-6%] sm:w-[34%]"
           >
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-[15%] bottom-[8%] h-2/3 rounded-full bg-signal/20 blur-2xl sm:hidden"
+            />
             <Image
               src="/images/runner.png"
               alt={`${PROFILE.name} running`}
               fill
               priority
-              sizes="(max-width: 768px) 40vw, 420px"
-              className="object-contain object-bottom drop-shadow-[0_18px_40px_rgba(255,90,54,0.35)]"
+              sizes="(max-width: 768px) 45vw, 420px"
+              className="object-contain object-bottom sm:drop-shadow-[0_16px_32px_rgba(255,90,54,0.3)]"
             />
           </motion.div>
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
           className="relative z-10 mt-8 flex flex-col items-center"
         >
           <p className="max-w-xl text-base text-secondary sm:text-lg">
@@ -88,7 +92,7 @@ export function Hero() {
       </div>
 
       {/* Ticker */}
-      <div className="relative overflow-hidden border-t border-grid bg-canvas/80 py-3" aria-hidden="true">
+      <div className="relative overflow-hidden border-t border-grid bg-canvas/90 py-3" aria-hidden="true">
         <div className="animate-marquee flex w-max items-center whitespace-nowrap">
           {[0, 1].map((n) => (
             <div key={n} className="flex items-center">

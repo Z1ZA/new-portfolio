@@ -21,8 +21,8 @@ export function TopBar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 ${
-        scrolled ? "border-b border-grid bg-canvas/75 backdrop-blur-md" : "border-b border-transparent"
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300 ${
+        scrolled ? "border-b border-grid bg-canvas/95 md:bg-canvas/80 md:backdrop-blur-md" : "border-b border-transparent"
       }`}
     >
       <a

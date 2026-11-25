@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "@/lib/hooks";
 
 interface ClipItem {
   id: string;
@@ -47,6 +48,8 @@ type AspectRatio = "9:16" | "1:1" | "16:9";
 type CaptionStyle = "karaoke" | "clean" | "off";
 
 export function AiClipperPreview() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(containerRef, "80px");
   const [clipIdx, setClipIdx] = useState(0);
   const [aspect, setAspect] = useState<AspectRatio>("9:16");
   const [captionStyle, setCaptionStyle] = useState<CaptionStyle>("karaoke");
@@ -60,12 +63,12 @@ export function AiClipperPreview() {
   }, [clipIdx]);
 
   useEffect(() => {
-    if (!playing) return;
+    if (!playing || !inView) return;
     const id = window.setInterval(() => {
       setWordStep((w) => (w + 1) % clip.words.length);
     }, 360);
     return () => window.clearInterval(id);
-  }, [playing, clip.words.length]);
+  }, [playing, inView, clip.words.length]);
 
   const frameBoxClass =
     aspect === "9:16"
@@ -77,7 +80,7 @@ export function AiClipperPreview() {
   const progressPct = Math.round(((wordStep + 1) / clip.words.length) * 100);
 
   return (
-    <div className="space-y-4">
+    <div ref={containerRef} className="space-y-4">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         {/* Left: Source Video + Detected Viral Clips + Studio Controls */}
         <div className="flex flex-col justify-between gap-4 border border-grid-strong bg-surface/60 p-4 lg:col-span-6">
@@ -193,11 +196,9 @@ export function AiClipperPreview() {
           </div>
 
           <div className="my-4 flex min-h-[340px] w-full items-center justify-center">
-            <motion.div
-              layout
+            <div
               data-theme="dark"
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className={`relative flex flex-col justify-between overflow-hidden border-2 border-grid-strong bg-gradient-to-b from-[#171b22] via-[#101318] to-[#0a0b0d] p-3 shadow-lg ${frameBoxClass}`}
+              className={`relative flex flex-col justify-between overflow-hidden border-2 border-grid-strong bg-gradient-to-b from-[#171b22] via-[#101318] to-[#0a0b0d] p-3 shadow-lg transition-[width,max-width] duration-300 ${frameBoxClass}`}
             >
               {/* Speaker Tracking Reticle */}
               <div className="flex items-center justify-between font-mono text-[9px]">
@@ -217,15 +218,15 @@ export function AiClipperPreview() {
                   <span className="absolute -right-1 -bottom-1 size-2 border-r-2 border-b-2 border-telemetry" />
                 </div>
 
-                {/* Animated Audio Waveform */}
+                {/* Animated Audio Waveform (GPU scaleY only) */}
                 <div className="mt-3 flex h-5 items-end gap-1" aria-hidden="true">
                   {[0.4, 0.9, 0.6, 1, 0.5, 0.85, 0.45, 0.75, 0.55].map((amp, i) => (
                     <motion.span
                       key={i}
                       animate={
-                        playing
-                          ? { height: [`${amp * 40}%`, `${amp * 100}%`, `${amp * 35}%`] }
-                          : { height: `${amp * 45}%` }
+                        playing && inView
+                          ? { scaleY: [amp * 0.4, amp, amp * 0.35] }
+                          : { scaleY: amp * 0.45 }
                       }
                       transition={{
                         duration: 0.65,
@@ -233,7 +234,7 @@ export function AiClipperPreview() {
                         delay: i * 0.07,
                         ease: "easeInOut",
                       }}
-                      className="w-1 bg-telemetry"
+                      className="h-full w-1 origin-bottom bg-telemetry"
                     />
                   ))}
                 </div>
@@ -278,7 +279,7 @@ export function AiClipperPreview() {
                   />
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* 4-stage pipeline strip */}

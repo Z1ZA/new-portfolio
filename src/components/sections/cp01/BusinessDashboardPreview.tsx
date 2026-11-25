@@ -268,7 +268,7 @@ export function BusinessDashboardPreview() {
             <div className="hud text-muted">TOP MOVING PRODUCTS</div>
             {TOP_ITEMS.map((item) => (
               <div key={item.name} className="flex items-center gap-3 font-mono text-xs">
-                <span className="w-40 truncate text-secondary">{item.name}</span>
+                <span className="w-32 shrink-0 truncate text-secondary sm:w-40">{item.name}</span>
                 <div className="h-2 flex-1 bg-canvas">
                   <div className="h-full bg-telemetry" style={{ width: `${item.pct}%` }} />
                 </div>

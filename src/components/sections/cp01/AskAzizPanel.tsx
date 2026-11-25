@@ -149,6 +149,7 @@ export function AskAzizPanel() {
       {/* Live conversation transcript */}
       <div
         ref={chatContainerRef}
+        data-lenis-prevent
         aria-live="polite"
         className="flex max-h-[360px] min-h-[260px] flex-col gap-3 overflow-y-auto border border-grid-strong bg-canvas/90 p-4"
       >
@@ -220,7 +221,7 @@ export function AskAzizPanel() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about AI Clipper, Motion Video Skills, Business Dashboard, relocation…"
           aria-label="Ask Abdul Aziz's AI assistant a question"
-          className="h-11 flex-1 border border-grid-strong bg-canvas px-4 font-mono text-xs text-ink placeholder:text-muted focus:border-telemetry focus:outline-none"
+          className="h-11 flex-1 border border-grid-strong bg-canvas px-4 font-mono text-base text-ink placeholder:text-muted focus:border-telemetry focus:outline-none sm:text-xs"
         />
         <button
           type="submit"

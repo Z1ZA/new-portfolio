@@ -29,11 +29,11 @@ export function ProgressRail() {
 
   return (
     <>
-      {/* Mobile / tablet: thin top bar */}
+      {/* Mobile / tablet: thin top bar bound directly to scrollYProgress for instant touch response */}
       <motion.div
         aria-hidden="true"
-        className="fixed inset-x-0 top-16 z-40 h-px origin-left bg-signal lg:hidden"
-        style={{ scaleX: progress }}
+        className="fixed inset-x-0 top-16 z-40 h-px origin-left bg-signal will-change-transform lg:hidden"
+        style={{ scaleX: scrollYProgress }}
       />
 
       {/* Desktop: vertical checkpoint rail (Start → CP01..CP05 → Finish) */}

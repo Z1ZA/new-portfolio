@@ -3,10 +3,10 @@
 import { ReactLenis } from "lenis/react";
 import { MotionConfig, useReducedMotion } from "motion/react";
 import { ThemeProvider } from "next-themes";
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-/** Timestamp (ms) when the visitor "crossed the start line" — powers the split timer. */
-const RaceClockContext = createContext<number>(0);
+/** Client mount timestamp (ms) for the shared course split timer. */
+const RaceClockContext = createContext<number | null>(null);
 
 export function useRaceStart() {
   return useContext(RaceClockContext);
@@ -14,7 +14,15 @@ export function useRaceStart() {
 
 function SmoothScroll({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();
-  if (reduce) return <>{children}</>;
+  const [enableLenis, setEnableLenis] = useState(false);
+
+  useEffect(() => {
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    const canHover = !window.matchMedia("(hover: none)").matches;
+    setEnableLenis(finePointer && canHover);
+  }, []);
+
+  if (reduce || !enableLenis) return <>{children}</>;
   return (
     <ReactLenis root options={{ lerp: 0.11, anchors: { offset: -72 }, autoRaf: true }}>
       {children}
@@ -23,7 +31,11 @@ function SmoothScroll({ children }: { children: ReactNode }) {
 }
 
 export function Providers({ children }: { children: ReactNode }) {
-  const [start] = useState(() => Date.now());
+  const [start, setStart] = useState<number | null>(null);
+
+  useEffect(() => {
+    setStart(Date.now());
+  }, []);
 
   return (
     <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>

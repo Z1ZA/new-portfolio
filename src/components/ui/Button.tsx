@@ -8,7 +8,7 @@ const BASE =
 
 const VARIANTS: Record<Variant, string> = {
   primary: "bg-signal text-white hover:brightness-110",
-  outline: "border border-grid-strong bg-elevated/60 text-ink backdrop-blur hover:border-telemetry hover:text-telemetry",
+  outline: "border border-grid-strong bg-elevated text-ink hover:border-telemetry hover:text-telemetry",
   ghost: "text-secondary hover:text-ink",
 };
 

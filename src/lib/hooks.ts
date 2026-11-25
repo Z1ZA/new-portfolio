@@ -2,64 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-/**
- * Decides whether the device should get the full WebGL hero.
- * Returns `null` until measured on the client (render the fallback meanwhile).
- */
-export function useCanRender3D(): boolean | null {
-  const [ok, setOk] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const nav = navigator as Navigator & {
-      deviceMemory?: number;
-      connection?: { saveData?: boolean };
-    };
-    const saveData = nav.connection?.saveData === true;
-    const lowCpu = (nav.hardwareConcurrency ?? 8) < 4;
-    const lowMem = nav.deviceMemory !== undefined && nav.deviceMemory < 4;
-
-    let webgl = false;
-    try {
-      const canvas = document.createElement("canvas");
-      webgl = !!(canvas.getContext("webgl2") || canvas.getContext("webgl"));
-    } catch {
-      webgl = false;
-    }
-
-    setOk(webgl && !reduce && !saveData && !lowCpu && !lowMem);
-  }, []);
-
-  return ok;
-}
-
-/**
- * True only when `ref`'s element is actually intersecting the viewport.
- * Starts `false` so navigating to `#systems` ("Back to CP02") does not
- * spin up off-screen WebGL contexts during route navigation.
- */
+/** True while `ref`'s element intersects the viewport (starts false until observed). */
 export function useInView<T extends Element>(ref: React.RefObject<T | null>, rootMargin = "0px") {
   const [inView, setInView] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    let timer: number | undefined;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        window.clearTimeout(timer);
-        if (entry.isIntersecting) {
-          timer = window.setTimeout(() => setInView(true), 80);
-        } else {
-          setInView(false);
-        }
-      },
-      { rootMargin },
-    );
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { rootMargin });
     io.observe(el);
-    return () => {
-      window.clearTimeout(timer);
-      io.disconnect();
-    };
+    return () => io.disconnect();
   }, [ref, rootMargin]);
   return inView;
 }
@@ -74,10 +25,11 @@ export function formatSplit(totalSeconds: number) {
   return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
 }
 
-/** Elapsed whole seconds since `start`, ticking every second. */
-export function useElapsed(start: number) {
+/** Elapsed whole seconds since `start` (null until mounted on client). */
+export function useElapsed(start: number | null) {
   const [elapsed, setElapsed] = useState(0);
   useEffect(() => {
+    if (start === null) return;
     const tick = () => setElapsed(Math.max(0, Math.floor((Date.now() - start) / 1000)));
     tick();
     const id = window.setInterval(tick, 1000);

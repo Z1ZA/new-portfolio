@@ -75,7 +75,7 @@ export function RouteLog() {
             <span className="text-telemetry">SELECT ANY WAYPOINT NODE (WP01–WP08)</span>
           </div>
 
-          <div className="overflow-x-auto pb-2">
+          <div className="no-scrollbar overflow-x-auto pb-2">
             <svg
               viewBox={`0 0 ${SVG_W} ${SVG_H}`}
               className="h-56 min-w-[680px] w-full select-none sm:h-64"

@@ -96,22 +96,18 @@ export function GearCheck() {
         </div>
 
         {/* Minimalist Technical Kit Flat-Lay */}
-        <div className="panel relative overflow-hidden p-5 sm:p-8">
-          <motion.div
-            layout
-            className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-5"
-          >
+        <div className="panel relative overflow-hidden p-4 sm:p-8">
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3.5 md:grid-cols-5">
             <AnimatePresence mode="popLayout">
               {visible.map((item) => (
                 <motion.div
-                  layout
                   key={item.name}
-                  initial={{ opacity: 0, scale: 0.92 }}
+                  initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1, rotate: item.tilt }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  whileHover={{ rotate: 0, y: -6, scale: 1.03 }}
-                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="group relative flex flex-col justify-between border border-grid-strong bg-surface/90 p-4 shadow-sm transition-colors hover:border-telemetry hover:bg-elevated"
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  whileHover={{ rotate: 0, y: -4 }}
+                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  className="group relative flex flex-col justify-between border border-grid-strong bg-surface/90 p-3 shadow-sm transition-colors hover:border-telemetry hover:bg-elevated sm:p-4"
                 >
                   <div className="flex items-center justify-between">
                     <span
@@ -130,19 +126,19 @@ export function GearCheck() {
                     </span>
                   </div>
 
-                  <div className="my-4 flex items-center gap-3">
-                    <span className="grid size-11 shrink-0 place-items-center border border-grid-strong bg-canvas font-mono text-sm font-black tracking-tight text-ink transition-colors group-hover:border-signal group-hover:text-signal">
+                  <div className="my-3 flex items-center gap-2.5 sm:my-4 sm:gap-3">
+                    <span className="grid size-10 shrink-0 place-items-center border border-grid-strong bg-canvas font-mono text-xs font-black tracking-tight text-ink transition-colors group-hover:border-signal group-hover:text-signal sm:size-11 sm:text-sm">
                       {item.code}
                     </span>
                     <div className="min-w-0">
-                      <div className="truncate text-sm font-bold text-ink">{item.name}</div>
-                      <div className="truncate font-mono text-[11px] text-muted">{item.sub}</div>
+                      <div className="truncate text-xs font-bold text-ink sm:text-sm">{item.name}</div>
+                      <div className="truncate font-mono text-[10px] text-muted sm:text-[11px]">{item.sub}</div>
                     </div>
                   </div>
                 </motion.div>
               ))}
             </AnimatePresence>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
